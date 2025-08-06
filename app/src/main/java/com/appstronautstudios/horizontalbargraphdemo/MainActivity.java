@@ -1,13 +1,16 @@
-package com.appstronautstudios.horizontalbargraph;
+package com.appstronautstudios.horizontalbargraphdemo;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.appstronautstudios.horizontalbargraph.HorizontalBarGraph;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.LinkedHashMap;
 import java.util.Random;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,17 +19,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        LinearLayout container = findViewById(R.id.container);
+        configure();
 
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(v -> {
+            configure();
+        });
+    }
+
+    private void configure() {
+        LinearLayout defaultLL = findViewById(R.id.default_colours);
+        defaultLL.removeAllViews();
         // set up fake data
         LinkedHashMap<String, Integer> fakeData1 = new LinkedHashMap<>();
-        int numSegments1 = new Random().nextInt(20);
-        for (int j = 0; j < numSegments1; j++) {
+        int numColours = new Random().nextInt(10) + 10;
+        for (int j = 0; j < numColours; j++) {
             fakeData1.put(generateRandomWord(), new Random().nextInt(10));
         }
         // add graph to parent that uses default lib colours
-        container.addView(new HorizontalBarGraph(MainActivity.this, fakeData1));
+        defaultLL.addView(new HorizontalBarGraph(MainActivity.this, fakeData1));
 
+        LinearLayout customLL = findViewById(R.id.custom_colours);
+        customLL.removeAllViews();
         // set up fake data
         LinkedHashMap<String, Integer> fakeData2 = new LinkedHashMap<>();
         for (int j = 0; j < 10; j++) {
@@ -44,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 Color.parseColor("#e4ddaa"),
                 Color.parseColor("#172717"),
                 Color.parseColor("#4137f9")};
-        container.addView(new HorizontalBarGraph(MainActivity.this, customColours, fakeData2));
+        customLL.addView(new HorizontalBarGraph(MainActivity.this, customColours, fakeData2));
     }
 
     private static String generateRandomWord() {

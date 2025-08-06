@@ -9,6 +9,8 @@ import android.widget.Space;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.core.graphics.ColorUtils;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -19,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import androidx.core.graphics.ColorUtils;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HorizontalBarGraph extends LinearLayout {
@@ -66,18 +67,16 @@ public class HorizontalBarGraph extends LinearLayout {
 
         Set<Map.Entry<String, Integer>> set = barCounts.entrySet();
         List<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String, Integer>>(set);
-        Collections.sort( list, new Comparator<Map.Entry<String, Integer>>()
-        {
-            public int compare( Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2 )
-            {
-                int result = (o2.getValue()).compareTo( o1.getValue() );
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                int result = (o2.getValue()).compareTo(o1.getValue());
                 if (result != 0) {
                     return result;
                 } else {
                     return o1.getKey().compareTo(o2.getKey());
                 }
             }
-        } );
+        });
 
         // config
         if (totalCount > 0) {
