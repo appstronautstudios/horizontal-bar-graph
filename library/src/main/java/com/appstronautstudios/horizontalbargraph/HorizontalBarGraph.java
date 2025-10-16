@@ -1,7 +1,6 @@
 package com.appstronautstudios.horizontalbargraph;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -9,10 +8,6 @@ import android.widget.Space;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import androidx.core.graphics.ColorUtils;
-
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -25,9 +20,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HorizontalBarGraph extends LinearLayout {
 
-    private final String[] COLOUR_SPECTRUM = new String[]{"#80C2E9", "#79e9d6", "#71e995", "#89e96a", "#cce963", "#e9bc5b", "#e96954"};
-    private final int STEPS_BETWEEN_COLOURS = 3;
-
     public HorizontalBarGraph(Context context) {
         super(context);
     }
@@ -35,7 +27,7 @@ public class HorizontalBarGraph extends LinearLayout {
     public HorizontalBarGraph(Context context, HashMap<String, Integer> barCounts) {
         super(context);
 
-        configureWithData(generateColourSteps(barCounts.size()), barCounts);
+        configureWithData(HBGUtils.generateDefaultColourSet(barCounts.size()), barCounts);
     }
 
     public HorizontalBarGraph(Context context, int[] colours, HashMap<String, Integer> barCounts) {
@@ -62,7 +54,7 @@ public class HorizontalBarGraph extends LinearLayout {
         // get total count for generating percentages
         int totalCount = 0;
         for (Integer count : barCounts.values()) {
-            totalCount += unbox(count);
+            totalCount += HBGUtils.unbox(count);
         }
 
         Set<Map.Entry<String, Integer>> set = barCounts.entrySet();
@@ -107,7 +99,7 @@ public class HorizontalBarGraph extends LinearLayout {
                 TextView typePercent = legendSegment.findViewById(R.id.type_percent);
                 typeLegend.setImageDrawable(new ColorDrawable(colours[currentBar]));
                 typeTitle.setText(barKey.getKey());
-                typePercent.setText(getNumberString(percent * 100, 1, false) + "%");
+                typePercent.setText(HBGUtils.getNumberString(percent * 100, 1, false) + "%");
                 legendContainer.addView(legendSegment);
 
                 // make sure we don't index out of bounds. Looping preferable to crash
@@ -123,83 +115,5 @@ public class HorizontalBarGraph extends LinearLayout {
             emptyTextTV.setVisibility(View.VISIBLE);
             barContainer.setVisibility(View.GONE);
         }
-    }
-
-    private int[] generateColourSteps(int size) {
-        int[] colours = new int[size];
-        final float colourIncrement = 1.0f / (STEPS_BETWEEN_COLOURS - 1);
-        float colourDiff = 0;
-        int colourIndex = 0;
-        int stepCounter = 0;
-
-        for (int i = 0; i < size; i++) {
-            // calculate next colour and update colour blend diff. Diff 0 = colour1, diff 1 = colour2
-            colours[i] = ColorUtils.blendARGB(Color.parseColor(COLOUR_SPECTRUM[colourIndex]), Color.parseColor(COLOUR_SPECTRUM[colourIndex + 1]), colourDiff);
-            colourDiff += colourIncrement;
-
-            stepCounter++;
-            if (stepCounter >= (STEPS_BETWEEN_COLOURS - 1)) {
-                // we've used up blend increments between colours. Reset blend factor and jump
-                // to next colours. E.g. start from purple - blue for 3 steps and then go from
-                // blue to cyan for 3 steps
-                stepCounter = 0;
-                colourDiff = 0;
-                colourIndex++;
-                if (colourIndex >= COLOUR_SPECTRUM.length - 1) {
-                    // we've gone through all the colours. Start again from the beginning
-                    colourIndex = 0;
-                }
-            }
-        }
-
-        return colours;
-    }
-
-    /**
-     * @param number  - number to operate on
-     * @param sigFigs - number of decimal points to round to
-     * @param signed  - true if you want to see a plus sign when positive. - sign always present
-     * @return - formatted string of number using given params
-     */
-    private static String getNumberString(double number, int sigFigs, boolean signed) {
-        DecimalFormatSymbols DFS = new DecimalFormatSymbols();
-        DFS.setDecimalSeparator('.');
-        DecimalFormat myFormatter;
-
-        switch (sigFigs) {
-            default:
-            case 0: {
-                myFormatter = new DecimalFormat("#");
-                break;
-            }
-            case 1: {
-                myFormatter = new DecimalFormat("#.#");
-                break;
-            }
-            case 2: {
-                myFormatter = new DecimalFormat("#.##");
-                break;
-            }
-            case 3: {
-                myFormatter = new DecimalFormat("#.###");
-                break;
-            }
-        }
-        myFormatter.setDecimalFormatSymbols(DFS);
-        if (signed) {
-            String sign = "-";
-            if (number > 0) {
-                sign = "+";
-            } else {
-                sign = "";
-            }
-            return sign + myFormatter.format(number);
-        } else {
-            return myFormatter.format(number);
-        }
-    }
-
-    private static int unbox(Integer i) {
-        return i != null ? i : 0;
     }
 }
