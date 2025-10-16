@@ -64,11 +64,21 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout dotLL = findViewById(R.id.dot_default_colours);
         dotLL.removeAllViews();
         LinkedHashMap<String, Integer> fakeDefaultDotData = new LinkedHashMap<>();
-        int dotNumbColours = new Random().nextInt(10) + 10;
-        for (int j = 0; j < dotNumbColours; j++) {
+        int dotNumColours = new Random().nextInt(10) + 10;
+        for (int j = 0; j < dotNumColours; j++) {
             fakeDefaultDotData.put(generateRandomWord(), new Random().nextInt(10));
         }
         dotLL.addView(new HorizontalDotGraph(MainActivity.this, fakeDefaultDotData));
+
+        // dot chart with default colours
+        LinearLayout dotReversedLL = findViewById(R.id.dot_default_colours_reversed);
+        dotReversedLL.removeAllViews();
+        LinkedHashMap<String, Integer> fakeDefaultDotReversedData = new LinkedHashMap<>();
+        int dotNumReversedColours = new Random().nextInt(10) + 10;
+        for (int j = 0; j < dotNumReversedColours; j++) {
+            fakeDefaultDotReversedData.put(generateRandomWord(), new Random().nextInt(10));
+        }
+        dotReversedLL.addView(new HorizontalDotGraph(MainActivity.this, fakeDefaultDotReversedData, 0, 9));
     }
 
     private static String generateRandomWord() {

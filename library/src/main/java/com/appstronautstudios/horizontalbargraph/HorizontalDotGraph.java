@@ -39,8 +39,8 @@ public class HorizontalDotGraph extends LinearLayout {
     }
 
     private void configureWithData(HashMap<String, Integer> dotCounts, int dotBest, int dotWorst) {
-        // generate the colour set to use
-        int[] colourSet = HBGUtils.generateRainbowGradient(Color.RED, Color.GREEN, dotBest - dotWorst + 1);
+        // generate the colour set to use. Allow best to be lower than worst
+        int[] colourSet = HBGUtils.generateRainbowGradient(Color.RED, Color.GREEN, Math.abs(dotBest - dotWorst) + 1);
 
         configureWithData(colourSet, dotCounts, dotBest, dotWorst);
     }
@@ -60,6 +60,18 @@ public class HorizontalDotGraph extends LinearLayout {
             totalCount += HBGUtils.unbox(count);
         }
 
+        // if best is LOWER than worst reverse colour array
+        int[] finalColours;
+        if (dotBest < dotWorst) {
+            int[] reversed = new int[colours.length];
+            for (int i = 0; i < colours.length; i++) {
+                reversed[i] = colours[colours.length - 1 - i];
+            }
+            finalColours = reversed;
+        } else {
+            finalColours = colours;
+        }
+
         int index = 1;
         if (totalCount > 0) {
             for (String key : dotCounts.keySet()) {
@@ -69,7 +81,7 @@ public class HorizontalDotGraph extends LinearLayout {
                 CircleImageView typeLegend = legendSegment.findViewById(R.id.type_legend);
                 TextView typeTitle = legendSegment.findViewById(R.id.type_title);
                 TextView typeValue = legendSegment.findViewById(R.id.type_value);
-                typeLegend.setImageDrawable(new ColorDrawable(colours[dotValue]));
+                typeLegend.setImageDrawable(new ColorDrawable(finalColours[dotValue]));
 
                 typeTitle.setText(index + ". " + key);
                 typeValue.setText(dotValue + "");
