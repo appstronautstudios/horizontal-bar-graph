@@ -8,6 +8,8 @@ import android.widget.Space;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.appstronautstudios.library.AppstronautUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,7 +29,7 @@ public class HorizontalBarGraph extends LinearLayout {
     public HorizontalBarGraph(Context context, HashMap<String, Integer> barCounts) {
         super(context);
 
-        configureWithData(HBGUtils.generateDefaultColourSet(barCounts.size()), barCounts);
+        configureWithData(AppstronautUtils.getColourSet(null, barCounts.size(), true), barCounts);
     }
 
     public HorizontalBarGraph(Context context, int[] colours, HashMap<String, Integer> barCounts) {
@@ -99,7 +101,7 @@ public class HorizontalBarGraph extends LinearLayout {
                 TextView typePercent = legendSegment.findViewById(R.id.type_percent);
                 typeLegend.setImageDrawable(new ColorDrawable(colours[currentBar]));
                 typeTitle.setText(barKey.getKey());
-                typePercent.setText(HBGUtils.getNumberString(percent * 100, 1, false) + "%");
+                typePercent.setText(AppstronautUtils.getNumberString(percent * 100, 1, false) + "%");
                 legendContainer.addView(legendSegment);
 
                 // make sure we don't index out of bounds. Looping preferable to crash

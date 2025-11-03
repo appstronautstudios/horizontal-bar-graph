@@ -54,10 +54,12 @@ public class HorizontalDotGraph extends LinearLayout {
 
         addView(container);
 
-        // get total count for generating percentages
-        int totalCount = 0;
-        for (Integer count : dotCounts.values()) {
-            totalCount += HBGUtils.unbox(count);
+        // safety
+        if (dotCounts == null || dotCounts.isEmpty()) {
+            // show no data view
+            emptyTextTV.setVisibility(View.VISIBLE);
+        } else {
+            emptyTextTV.setVisibility(View.GONE);
         }
 
         // if best is LOWER than worst reverse colour array
@@ -73,27 +75,21 @@ public class HorizontalDotGraph extends LinearLayout {
         }
 
         int index = 1;
-        if (totalCount > 0) {
-            for (String key : dotCounts.keySet()) {
-                int dotValue = HBGUtils.unbox(dotCounts.get(key));
-                // create legend segment with colour, title and percent
-                View legendSegment = inflate(getContext(), R.layout.view_type_dot_cell, null);
-                CircleImageView typeLegend = legendSegment.findViewById(R.id.type_legend);
-                TextView typeTitle = legendSegment.findViewById(R.id.type_title);
-                TextView typeValue = legendSegment.findViewById(R.id.type_value);
-                typeLegend.setImageDrawable(new ColorDrawable(finalColours[dotValue]));
+        for (String key : dotCounts.keySet()) {
+            int dotValue = HBGUtils.unbox(dotCounts.get(key));
+            // create legend segment with colour, title and percent
+            View legendSegment = inflate(getContext(), R.layout.view_type_dot_cell, null);
+            CircleImageView typeLegend = legendSegment.findViewById(R.id.type_legend);
+            TextView typeTitle = legendSegment.findViewById(R.id.type_title);
+            TextView typeValue = legendSegment.findViewById(R.id.type_value);
+            typeLegend.setImageDrawable(new ColorDrawable(finalColours[dotValue]));
 
-                typeTitle.setText(index + ". " + key);
-                typeValue.setText(dotValue + "");
+            typeTitle.setText(index + ". " + key);
+            typeValue.setText(dotValue + "");
 
-                index++;
+            index++;
 
-                container.addView(legendSegment);
-            }
-            emptyTextTV.setVisibility(View.GONE);
-        } else {
-            //show no data view
-            emptyTextTV.setVisibility(View.VISIBLE);
+            container.addView(legendSegment);
         }
     }
 }
