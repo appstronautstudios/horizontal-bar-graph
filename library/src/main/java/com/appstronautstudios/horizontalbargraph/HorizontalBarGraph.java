@@ -8,7 +8,8 @@ import android.widget.Space;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.appstronautstudios.library.AppstronautUtils;
+import com.appstronautstudios.generalutils.AppstronautUtils;
+import com.appstronautstudios.generalutils.Boxer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,7 +57,7 @@ public class HorizontalBarGraph extends LinearLayout {
         // get total count for generating percentages
         int totalCount = 0;
         for (Integer count : barCounts.values()) {
-            totalCount += HBGUtils.unbox(count);
+            totalCount += Boxer.unbox(count);
         }
 
         Set<Map.Entry<String, Integer>> set = barCounts.entrySet();

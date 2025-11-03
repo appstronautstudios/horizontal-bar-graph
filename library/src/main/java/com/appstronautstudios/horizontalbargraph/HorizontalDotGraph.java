@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.appstronautstudios.generalutils.Boxer;
+
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -24,7 +26,7 @@ public class HorizontalDotGraph extends LinearLayout {
         int bestValue = 0;
         int worstValue = 0;
         for (String key : dotCounts.keySet()) {
-            int value = HBGUtils.unbox(dotCounts.get(key));
+            int value = Boxer.unbox(dotCounts.get(key));
             if (value < worstValue) worstValue = value;
             if (value > bestValue) bestValue = value;
         }
@@ -76,7 +78,7 @@ public class HorizontalDotGraph extends LinearLayout {
 
         int index = 1;
         for (String key : dotCounts.keySet()) {
-            int dotValue = HBGUtils.unbox(dotCounts.get(key));
+            int dotValue = Boxer.unbox(dotCounts.get(key));
             // create legend segment with colour, title and percent
             View legendSegment = inflate(getContext(), R.layout.view_type_dot_cell, null);
             CircleImageView typeLegend = legendSegment.findViewById(R.id.type_legend);

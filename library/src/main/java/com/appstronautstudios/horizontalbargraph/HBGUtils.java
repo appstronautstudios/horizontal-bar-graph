@@ -60,8 +60,4 @@ public class HBGUtils {
 
         return colours;
     }
-
-    public static int unbox(Integer i) {
-        return i != null ? i : 0;
-    }
 }

@@ -116,6 +116,10 @@
                         android:orientation="vertical" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="80dp" />
         </LinearLayout>
     </ScrollView>
 
@@ -128,5 +132,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:contentDescription="add"
-        android:src="@android:drawable/ic_input_add" />
+        android:src="@drawable/refresh_24px"
+        android:tint="@color/gray_light" />
 </RelativeLayout>
